@@ -424,6 +424,25 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdImageProtectionPolicy|0x3
   gRk356xTokenSpaceGuid.PcdPlatformName|"RADXA CM3"
   gRk356xTokenSpaceGuid.PcdCpuName|"Rockchip RK3566 (Cortex-A55)"
+  gRk356xTokenSpaceGuid.PcdPlatformVendorName|"RADXA"
+  gRk356xTokenSpaceGuid.PcdFamilyName|"ROCK3"
+  gRk356xTokenSpaceGuid.PcdProductUrl|"https://wiki.radxa.com/Rock3/CM3"
+  gRk356xTokenSpaceGuid.PcdMemoryVendorName|"Unknown"
+
+  #
+  # USB support
+  #
+  gRk356xTokenSpaceGuid.PcdOhc0Status|0xF
+  gRk356xTokenSpaceGuid.PcdOhc1Status|0xF
+  gRk356xTokenSpaceGuid.PcdEhc0Status|0xF
+  gRk356xTokenSpaceGuid.PcdEhc1Status|0xF
+  gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
+  gRk356xTokenSpaceGuid.PcdXhc1Status|0xF
+
+  #
+  # Ethernet support
+  #
+  gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
   # USB support
@@ -456,13 +475,13 @@
   gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|27
 
   #
-  # The RADXA CM3 has inverted polarity for the PWREN pin on the SD card slot
+  # This module has inverted polarity for the PWREN pin on the SD card slot
   #
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnUsed|TRUE
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnInverted|TRUE
 
   #
-  # The SOQuartz has a WiFi card on the second MSHC
+  # This module has a WiFi card on the second MSHC
   #
   gRk356xTokenSpaceGuid.PcdMshc1Status|0xF
   gRk356xTokenSpaceGuid.PcdMshc1SdioIrq|TRUE
@@ -521,6 +540,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   }
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
@@ -611,7 +631,7 @@
   #
   # SMBIOS Support
   #
-  Platform/Radxa/CM3/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #

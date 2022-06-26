@@ -122,6 +122,7 @@
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
+  SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
 
   # Devices
   NonDiscoverableDeviceRegistrationLib|MdeModulePkg/Library/NonDiscoverableDeviceRegistrationLib/NonDiscoverableDeviceRegistrationLib.inf
@@ -427,6 +428,10 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdImageProtectionPolicy|0x3
   gRk356xTokenSpaceGuid.PcdPlatformName|"PINE64 Quartz64 Model A"
   gRk356xTokenSpaceGuid.PcdCpuName|"Rockchip RK3566 (Cortex-A55)"
+  gRk356xTokenSpaceGuid.PcdPlatformVendorName|"Pine64"
+  gRk356xTokenSpaceGuid.PcdFamilyName|"Quartz64"
+  gRk356xTokenSpaceGuid.PcdProductUrl|"https://www.pine64.org/quartz64a/"
+  gRk356xTokenSpaceGuid.PcdMemoryVendorName|"Micron"
 
   #
   # USB support
@@ -437,6 +442,13 @@
   gRk356xTokenSpaceGuid.PcdEhc1Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc1Status|0xF
+  # Hack to work around broken USB3 port on Quartz64 model A
+  gRk356xTokenSpaceGuid.PcdMultiPhyUsb3DataBits|16
+
+  #
+  # Ethernet support
+  #
+  gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
   # PCI support
@@ -459,7 +471,7 @@
   gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|22
 
   #
-  # The Quartz64 board has inverted polarity for the PWREN pin on the SD card slot
+  # This board has inverted polarity for the PWREN pin on the SD card slot
   #
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnUsed|TRUE
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnInverted|TRUE
@@ -517,6 +529,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   }
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
@@ -607,7 +620,7 @@
   #
   # SMBIOS Support
   #
-  Platform/Pine64/Quartz64/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #

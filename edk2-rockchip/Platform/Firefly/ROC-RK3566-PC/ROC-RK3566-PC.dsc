@@ -427,6 +427,10 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdImageProtectionPolicy|0x3
   gRk356xTokenSpaceGuid.PcdPlatformName|"Firefly ROC-RK3566-PC"
   gRk356xTokenSpaceGuid.PcdCpuName|"Rockchip RK3566 (Cortex-A55)"
+  gRk356xTokenSpaceGuid.PcdPlatformVendorName|"Firefly"
+  gRk356xTokenSpaceGuid.PcdFamilyName|"ROC-RK3566-PC"
+  gRk356xTokenSpaceGuid.PcdProductUrl|"https://en.t-firefly.com/product/industry/rocrk3566pc.html"
+  gRk356xTokenSpaceGuid.PcdMemoryVendorName|"Unknown"
 
   #
   # USB support
@@ -437,6 +441,11 @@
   gRk356xTokenSpaceGuid.PcdEhc1Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc1Status|0xF
+
+  #
+  # Ethernet support
+  #
+  gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
   # PCI support
@@ -464,6 +473,13 @@
   gRk356xTokenSpaceGuid.PcdMshc1Status|0xF
   gRk356xTokenSpaceGuid.PcdMshc1SdioIrq|TRUE
   gRk356xTokenSpaceGuid.PcdMshc1NonRemovable|TRUE
+
+  #
+  # RTC support (hym8563 at 0x51 on I2C2)
+  #
+  gRk356xTokenSpaceGuid.PcdRtcI2cBusBase|0xFE5B0000
+  gRk356xTokenSpaceGuid.PcdRtcI2cAddr|0x51
+
 
 [PcdsDynamicHii.common.DEFAULT]
 
@@ -518,6 +534,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   }
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
@@ -525,7 +542,7 @@
   EmbeddedPkg/ResetRuntimeDxe/ResetRuntimeDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf {
     <LibraryClasses>
-      RealTimeClockLib|EmbeddedPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+      RealTimeClockLib|Silicon/Rockchip/Rk356x/Library/Hym8563RtcLib/RtcLib.inf
   }
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
@@ -608,7 +625,7 @@
   #
   # SMBIOS Support
   #
-  Platform/Firefly/ROC-RK3566-PC/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #

@@ -4,7 +4,7 @@
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
 #  Copyright (c) 2015 - 2021, Intel Corporation. All rights reserved.
 #  Copyright (c) 2017 - 2021, Andrei Warkentin <andrey.warkentin@gmail.com>
-#  Copyright (C) 2021, Jared McNeill <jmcneill@invisible.ca>
+#  Copyright (C) 2021 - 2022, Jared McNeill <jmcneill@invisible.ca>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -122,6 +122,7 @@
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
+  SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
 
   # Devices
   NonDiscoverableDeviceRegistrationLib|MdeModulePkg/Library/NonDiscoverableDeviceRegistrationLib/NonDiscoverableDeviceRegistrationLib.inf
@@ -426,6 +427,10 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdImageProtectionPolicy|0x3
   gRk356xTokenSpaceGuid.PcdPlatformName|"Firefly ROC-RK3568-PC"
   gRk356xTokenSpaceGuid.PcdCpuName|"Rockchip RK3568 (Cortex-A55)"
+  gRk356xTokenSpaceGuid.PcdPlatformVendorName|"Firefly"
+  gRk356xTokenSpaceGuid.PcdFamilyName|"ROC-RK3568-PC"
+  gRk356xTokenSpaceGuid.PcdProductUrl|"https://en.t-firefly.com/product/industry/rocrk3568pc.html"
+  gRk356xTokenSpaceGuid.PcdMemoryVendorName|"Unknown"
 
   #
   # USB support
@@ -436,6 +441,12 @@
   gRk356xTokenSpaceGuid.PcdEhc1Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc1Status|0xF
+
+  #
+  # Ethernet support
+  #
+  gRk356xTokenSpaceGuid.PcdMac0Status|0xF
+  gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
   # PCI support
@@ -456,7 +467,20 @@
   gRk356xTokenSpaceGuid.PcdPcieResetGpioBank|2
   gRk356xTokenSpaceGuid.PcdPcieResetGpioPin|30
   gRk356xTokenSpaceGuid.PcdPciePowerGpioBank|0
-  gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|20
+  gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|28
+
+  #
+  # The ROC-RK3568-PC has a WiFi card on the third MSHC
+  #
+  gRk356xTokenSpaceGuid.PcdMshc2Status|0xF
+  gRk356xTokenSpaceGuid.PcdMshc2SdioIrq|TRUE
+  gRk356xTokenSpaceGuid.PcdMshc2NonRemovable|TRUE
+
+  #
+  # RTC support (hym8563 at 0x51 on I2C5)
+  #
+  gRk356xTokenSpaceGuid.PcdRtcI2cBusBase|0xFE5E0000
+  gRk356xTokenSpaceGuid.PcdRtcI2cAddr|0x51
 
 [PcdsDynamicHii.common.DEFAULT]
 
@@ -511,6 +535,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   }
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
@@ -518,7 +543,7 @@
   EmbeddedPkg/ResetRuntimeDxe/ResetRuntimeDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf {
     <LibraryClasses>
-      RealTimeClockLib|EmbeddedPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+      RealTimeClockLib|Silicon/Rockchip/Rk356x/Library/Hym8563RtcLib/RtcLib.inf
   }
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
@@ -601,7 +626,7 @@
   #
   # SMBIOS Support
   #
-  Platform/Firefly/ROC-RK3568-PC/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #

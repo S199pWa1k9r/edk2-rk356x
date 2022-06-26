@@ -18,6 +18,7 @@
 
 [Sources]
   BoardInitDxe.c
+  EthernetPhy.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -47,6 +48,7 @@
   I2cLib
   MultiPhyLib
   OtpLib
+  SocLib
 
 [Protocols]
 

@@ -122,6 +122,7 @@
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
+  SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
 
   # Devices
   NonDiscoverableDeviceRegistrationLib|MdeModulePkg/Library/NonDiscoverableDeviceRegistrationLib/NonDiscoverableDeviceRegistrationLib.inf
@@ -427,11 +428,20 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdImageProtectionPolicy|0x3
   gRk356xTokenSpaceGuid.PcdPlatformName|"PINE64 SOQuartz CM4"
   gRk356xTokenSpaceGuid.PcdCpuName|"Rockchip RK3566 (Cortex-A55)"
+  gRk356xTokenSpaceGuid.PcdPlatformVendorName|"Pine64"
+  gRk356xTokenSpaceGuid.PcdFamilyName|"Quartz64"
+  gRk356xTokenSpaceGuid.PcdProductUrl|"https://wiki.pine64.org/wiki/SOQuartz"
+  gRk356xTokenSpaceGuid.PcdMemoryVendorName|"Micron"
 
   #
   # Only a single USB controller is brought out
   #
   gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
+
+  #
+  # Ethernet support
+  #
+  gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
   # PCI support
@@ -452,7 +462,7 @@
   gRk356xTokenSpaceGuid.PcdPcieResetGpioPin|10
 
   #
-  # The SOQuartz has a WiFi card on the second MSHC
+  # This module has a WiFi card on the second MSHC
   #
   gRk356xTokenSpaceGuid.PcdMshc1Status|0xF
   gRk356xTokenSpaceGuid.PcdMshc1SdioIrq|TRUE
@@ -511,6 +521,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
   }
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
@@ -601,7 +612,7 @@
   #
   # SMBIOS Support
   #
-  Platform/Pine64/SOQuartz/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
