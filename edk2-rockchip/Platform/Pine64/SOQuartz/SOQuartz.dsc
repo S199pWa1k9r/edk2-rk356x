@@ -573,7 +573,7 @@
   #
   # USB
   #
-  #MdeModulePkg/Bus/Pci/OhciDxe/OhciDxe.inf
+  Silicon/Rockchip/Rk356x/Drivers/OhciDxe/OhciDxe.inf
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
@@ -599,7 +599,7 @@
   #
   # Devicetree support
   #
-  # Platform/Pine64/SOQuartz/Drivers/FdtDxe/FdtDxe.inf
+  # Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
 
   #
   # ACPI Support

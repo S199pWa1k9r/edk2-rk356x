@@ -1,3 +1,3 @@
-#### 2022-04-29
+#### 2023-03-18
 
-* Fix a bug that prevented USB3 devices from working on USB3 ports with Firefly boards.
+* Add OHCI support to UEFI (allows low/full speed devices to be plugged in to EHCI ports).

@@ -121,6 +121,7 @@
   I2cLib|Silicon/Rockchip/Rk356x/Library/I2cLib/I2cLib.inf
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
+  SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
 
   # Devices
@@ -586,7 +587,7 @@
   #
   # USB
   #
-  #MdeModulePkg/Bus/Pci/OhciDxe/OhciDxe.inf
+  Silicon/Rockchip/Rk356x/Drivers/OhciDxe/OhciDxe.inf
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
@@ -612,7 +613,7 @@
   #
   # Devicetree support
   #
-  # Platform/Firefly/ROC-RK3566-PC/Drivers/FdtDxe/FdtDxe.inf
+  # Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
 
   #
   # ACPI Support
