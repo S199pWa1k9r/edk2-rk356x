@@ -51,11 +51,13 @@
 #include <Library/PrintLib.h>
 #include <Library/CruLib.h>
 #include <Library/SdramLib.h>
+#include <Library/OtpLib.h>
 #include <Protocol/ArmScmiClockProtocol.h>
 
 #define SMB_IS_DIGIT(c)  (((c) >= '0') && ((c) <= '9'))
 
 STATIC UINT64 mMemorySize = 0;
+
 
 /***********************************************************************
         SMBIOS data definition  TYPE0  BIOS Information
@@ -832,7 +834,10 @@ SysInfoUpdateSmbiosType1 (
   )
 {
   UINT32 BoardRevision = 0;
-  UINT64 BoardSerial = 0;
+  UINT64 BoardSerial;
+
+  // Get serial number from OTP
+  BoardSerial = OtpGetSerial ();
 
   AsciiStrCpyS (mSysInfoProductName, sizeof (mSysInfoProductName), (CHAR8 *) PcdGetPtr(PcdPlatformName));
   AsciiStrCpyS (mSysInfoFamilyName, sizeof (mSysInfoFamilyName), (CHAR8 *) PcdGetPtr(PcdFamilyName));

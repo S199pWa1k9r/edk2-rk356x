@@ -50,6 +50,7 @@
   gRk356xTokenSpaceGuid.PcdMshc2NonRemovable|FALSE|BOOLEAN|0x0000001a
   # Pcds for eMMC
   gRk356xTokenSpaceGuid.PcdEmmcDxeBaseAddress|0xFE310000|UINT32|0x00000020
+  gRk356xTokenSpaceGuid.PcdEmmcForceHighSpeed|FALSE|BOOLEAN|0x00000021
   # Pcds for PCIe
   gRk356xTokenSpaceGuid.PcdPcieResetGpioBank|0xFF|UINT8|0x00000030
   gRk356xTokenSpaceGuid.PcdPcieResetGpioPin|0xFF|UINT8|0x00000031
@@ -57,8 +58,25 @@
   gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|0xFF|UINT8|0x00000033
   gRk356xTokenSpaceGuid.PcdPcieLinkSpeed|0x2|UINT32|0x00000034
   gRk356xTokenSpaceGuid.PcdPcieNumLanes|0x1|UINT32|0x00000035
+  gRk356xTokenSpaceGuid.PcdPcieApbBase|0xFE260000|UINT64|0x00000036
+  gRk356xTokenSpaceGuid.PcdPcieDbiBase|0x3C0000000|UINT64|0x00000037
   # Pcds for RTC
   gRk356xTokenSpaceGuid.PcdRtcI2cBusBase|0|UINT32|0x00000040
   gRk356xTokenSpaceGuid.PcdRtcI2cAddr|0|UINT8|0x00000041
-  # Pcds for MultiPhy
-  gRk356xTokenSpaceGuid.PcdMultiPhyUsb3DataBits|32|UINT8|0x00000050
+  # Pcds for Pcie30Phy
+  gRk356xTokenSpaceGuid.PcdPcie30PhyLane0LinkNum|1|UINT8|0x00000060
+  gRk356xTokenSpaceGuid.PcdPcie30PhyLane1LinkNum|1|UINT8|0x00000061
+  # Pcds for SATA
+  gRk356xTokenSpaceGuid.PcdSataBaseAddr|0xFC000000|UINT64|0x00000070
+  gRk356xTokenSpaceGuid.PcdSataSize|0x400000|UINT64|0x00000071
+  gRk356xTokenSpaceGuid.PcdSataNumController|3|UINT32|0x00000072
+  gRk356xTokenSpaceGuid.PcdSata0Status|0|UINT8|0x00000073
+  gRk356xTokenSpaceGuid.PcdSata1Status|0|UINT8|0x00000074
+  gRk356xTokenSpaceGuid.PcdSata2Status|0|UINT8|0x00000075
+  # Pcds for CPU voltage
+  gRk356xTokenSpaceGuid.PcdCpuVoltageI2cBusBase|0xFDD40000|UINT32|0x00000080
+  gRk356xTokenSpaceGuid.PcdCpuVoltageI2cAddr|0x1c|UINT8|0x00000081
+  gRk356xTokenSpaceGuid.PcdCpuVoltageVselReg|0x11|UINT8|0x00000082
+  gRk356xTokenSpaceGuid.PcdCpuVoltageUVolBase|600000|UINT32|0x00000083
+  gRk356xTokenSpaceGuid.PcdCpuVoltageUVolStep|6250|UINT32|0x00000084
+  gRk356xTokenSpaceGuid.PcdCpuVoltageRampDelay|2300|UINT32|0x00000085
