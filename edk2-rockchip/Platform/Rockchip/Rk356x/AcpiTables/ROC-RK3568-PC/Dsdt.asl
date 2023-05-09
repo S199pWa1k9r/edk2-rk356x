@@ -16,12 +16,14 @@ DefinitionBlock ("DsdtTable.aml", "DSDT",
     include ("Cpu.asl")
     include ("Tsadc.asl")
     include ("Uart.asl")
+    include ("Wdt.asl")
     include ("Usb2.asl")
     include ("Usb3.asl")
     include ("Gmac.asl")
     include ("Mshc.asl")
     include ("Emmc.asl")
-    include ("Pcie2x1.asl")
+    include ("Sata.asl")
+    include ("Pcie3x2.asl")
 
   } // Scope (_SB)
 }

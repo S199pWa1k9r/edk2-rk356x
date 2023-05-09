@@ -1,7 +1,7 @@
 /** @file
-*  DesignWare Mobile Storage Host Controller (SD/SDIO) devices.
+*  PCIe2x1
 *
-*  Copyright (c) 2022, Jared McNeill <jmcneill@invisible.ca>
+*  Copyright (c) 2022-2023, Jared McNeill <jmcneill@invisible.ca>
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -13,7 +13,8 @@ Device (PCI0) {
     Name (_HID, "PNP0A08")
     Name (_CID, "PNP0A03")
     Name (_CCA, Zero)
-    Name (_SEG, Zero)
+    Name (_UID, 0)
+    Name (_SEG, 0)
     Name (_BBN, One)
 
     Name (_PRT, Package() {

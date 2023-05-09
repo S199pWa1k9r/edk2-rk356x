@@ -1,3 +1,3 @@
-#### 2023-03-18
+#### v1.1
 
-* Add OHCI support to UEFI (allows low/full speed devices to be plugged in to EHCI ports).
+* Fix possible memory corruption by OHCI controller at boot.

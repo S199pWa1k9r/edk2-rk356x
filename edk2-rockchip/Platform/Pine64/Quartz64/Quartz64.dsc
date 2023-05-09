@@ -116,11 +116,13 @@
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
 
   # Rockchip SoC libraries
+  CpuVoltageLib|Silicon/Rockchip/Rk356x/Library/Tsc4525CpuVoltageLib/CpuVoltageLib.inf
   CruLib|Silicon/Rockchip/Rk356x/Library/CruLib/CruLib.inf
   GpioLib|Silicon/Rockchip/Rk356x/Library/GpioLib/GpioLib.inf
   I2cLib|Silicon/Rockchip/Rk356x/Library/I2cLib/I2cLib.inf
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
+  Pcie30PhyLib|Silicon/Rockchip/Rk356x/Library/Pcie30PhyLib/Pcie30PhyLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
   SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
 
@@ -223,7 +225,7 @@
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  EfiResetSystemLib|ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.inf
+  EfiResetSystemLib|Platform/Rockchip/Rk356x/Library/ResetLib/ResetLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
   VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
 
@@ -234,11 +236,11 @@
 ###################################################################################################
 
 [BuildOptions]
-  GCC:*_*_*_CC_FLAGS          = -DRK356X
-  GCC:*_*_*_PP_FLAGS          = -DRK356X
-  GCC:*_*_*_ASLPP_FLAGS       = -DRK356X
-  GCC:*_*_*_ASLCC_FLAGS       = -DRK356X
-  GCC:*_*_*_VFRPP_FLAGS       = -DRK356X
+  GCC:*_*_*_CC_FLAGS          = -DRK356X -DQUARTZ64
+  GCC:*_*_*_PP_FLAGS          = -DRK356X -DQUARTZ64
+  GCC:*_*_*_ASLPP_FLAGS       = -DRK356X -DQUARTZ64
+  GCC:*_*_*_ASLCC_FLAGS       = -DRK356X -DQUARTZ64
+  GCC:*_*_*_VFRPP_FLAGS       = -DRK356X -DQUARTZ64
   GCC:RELEASE_*_*_CC_FLAGS    = -DMDEPKG_NDEBUG -DNDEBUG
 
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
@@ -332,7 +334,11 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderCode|20
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData|0
 
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2-DEV"
+  !ifdef $(FIRMWARE_VER)
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
+  !else
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2-DEV"
+  !endif
 
   # Default platform supported RFC 4646 languages: (American) English
   gEfiMdePkgTokenSpaceGuid.PcdUefiVariableDefaultPlatformLangCodes|"en-US"
@@ -340,10 +346,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x10000
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x8000
   gEfiMdeModulePkgTokenSpaceGuid.PcdVariableStoreSize|0x10000
-  #
-  # Make VariableRuntimeDxe work at emulated non-volatile variable mode.
-  #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
@@ -442,13 +444,16 @@
   gRk356xTokenSpaceGuid.PcdEhc1Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc0Status|0xF
   gRk356xTokenSpaceGuid.PcdXhc1Status|0xF
-  # Hack to work around broken USB3 port on Quartz64 model A
-  gRk356xTokenSpaceGuid.PcdMultiPhyUsb3DataBits|16
 
   #
   # Ethernet support
   #
   gRk356xTokenSpaceGuid.PcdMac1Status|0xF
+
+  #
+  # SATA support
+  #
+  gRk356xTokenSpaceGuid.PcdSata1Status|0xF
 
   #
   # PCI support
@@ -471,12 +476,32 @@
   gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|22
 
   #
+  # Fan support
+  #
+  gRk356xTokenSpaceGuid.PcdFanGpioBank|0
+  gRk356xTokenSpaceGuid.PcdFanGpioPin|27
+
+  #
   # This board has inverted polarity for the PWREN pin on the SD card slot
   #
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnUsed|TRUE
   gRk356xTokenSpaceGuid.PcdMshcDxePwrEnInverted|TRUE
 
 [PcdsDynamicHii.common.DEFAULT]
+
+  #
+  # Reset-related.
+  #
+  gRk356xTokenSpaceGuid.PcdPlatformResetDelay|L"ResetDelay"|gRk356xTokenSpaceGuid|0x0|0
+
+  #
+  # ConfigDxe
+  #
+  gRk356xTokenSpaceGuid.PcdSystemTableMode|L"SystemTableMode"|gConfigDxeFormSetGuid|0x0|0
+  gRk356xTokenSpaceGuid.PcdCpuClock|L"CpuClock"|gConfigDxeFormSetGuid|0x0|2
+  gRk356xTokenSpaceGuid.PcdCustomCpuClock|L"CustomCpuClock"|gConfigDxeFormSetGuid|0x0|816
+  gRk356xTokenSpaceGuid.PcdMultiPhy1Mode|L"MultiPhy1Mode"|gConfigDxeFormSetGuid|0x0|0
+  gRk356xTokenSpaceGuid.PcdFanMode|L"FanMode"|gConfigDxeFormSetGuid|0x0|1
 
   #
   # Common UEFI ones.
@@ -525,6 +550,11 @@
   #
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
+  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf {
+    <LibraryClasses>
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
+  }
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
@@ -571,6 +601,11 @@
   Platform/Pine64/Quartz64/Drivers/BoardInitDxe/BoardInitDxe.inf
 
   #
+  # Config
+  #
+  Platform/Rockchip/Rk356x/Drivers/ConfigDxe/ConfigDxe.inf
+
+  #
   # FAT filesystem + GPT/MBR partitioning
   #
   MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
@@ -607,7 +642,7 @@
   #
   # Devicetree support
   #
-  # Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
 
   #
   # ACPI Support
@@ -639,6 +674,7 @@
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+  Silicon/Rockchip/Rk356x/Drivers/SataDxe/SataDxe.inf
 
   #
   # TRNG Support

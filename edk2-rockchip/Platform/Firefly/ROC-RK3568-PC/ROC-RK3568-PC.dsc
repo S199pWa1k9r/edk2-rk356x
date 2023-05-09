@@ -116,11 +116,13 @@
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
 
   # Rockchip SoC libraries
+  CpuVoltageLib|Silicon/Rockchip/Rk356x/Library/Tsc4525CpuVoltageLib/CpuVoltageLib.inf
   CruLib|Silicon/Rockchip/Rk356x/Library/CruLib/CruLib.inf
   GpioLib|Silicon/Rockchip/Rk356x/Library/GpioLib/GpioLib.inf
   I2cLib|Silicon/Rockchip/Rk356x/Library/I2cLib/I2cLib.inf
   MultiPhyLib|Silicon/Rockchip/Rk356x/Library/MultiPhyLib/MultiPhyLib.inf
   OtpLib|Silicon/Rockchip/Rk356x/Library/OtpLib/OtpLib.inf
+  Pcie30PhyLib|Silicon/Rockchip/Rk356x/Library/Pcie30PhyLib/Pcie30PhyLib.inf
   SdramLib|Silicon/Rockchip/Rk356x/Library/SdramLib/SdramLib.inf
   SocLib|Silicon/Rockchip/Rk356x/Library/SocLib/SocLib.inf
 
@@ -223,7 +225,7 @@
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  EfiResetSystemLib|ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.inf
+  EfiResetSystemLib|Platform/Rockchip/Rk356x/Library/ResetLib/ResetLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
   VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
 
@@ -332,7 +334,11 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderCode|20
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData|0
 
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2-DEV"
+  !ifdef $(FIRMWARE_VER)
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
+  !else
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2-DEV"
+  !endif
 
   # Default platform supported RFC 4646 languages: (American) English
   gEfiMdePkgTokenSpaceGuid.PcdUefiVariableDefaultPlatformLangCodes|"en-US"
@@ -340,10 +346,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x10000
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x8000
   gEfiMdeModulePkgTokenSpaceGuid.PcdVariableStoreSize|0x10000
-  #
-  # Make VariableRuntimeDxe work at emulated non-volatile variable mode.
-  #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
@@ -449,25 +451,36 @@
   gRk356xTokenSpaceGuid.PcdMac1Status|0xF
 
   #
+  # SATA support
+  #
+  gRk356xTokenSpaceGuid.PcdSata2Status|0xF
+
+  #
   # PCI support
   #
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x0000000300000000
+  gRk356xTokenSpaceGuid.PcdPcieApbBase|0xFE280000
+  gRk356xTokenSpaceGuid.PcdPcieDbiBase|0x00000003C0800000
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x0000000380000000
   gArmTokenSpaceGuid.PcdPciBusMin|0
-  # TODO: fix
   gArmTokenSpaceGuid.PcdPciBusMax|1
-  gArmTokenSpaceGuid.PcdPciMmio32Base|0xF4000000
+  gArmTokenSpaceGuid.PcdPciMmio32Base|0xF0000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x02000000
-  gArmTokenSpaceGuid.PcdPciMmio64Base|0x0000000310000000
+  gArmTokenSpaceGuid.PcdPciMmio64Base|0x0000000390000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0x000000002FFF0000
   gArmTokenSpaceGuid.PcdPciIoBase|0x0000
   gArmTokenSpaceGuid.PcdPciIoSize|0x10000
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|34
 
-  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x000000033FFF0000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x00000003BFFF0000
   gRk356xTokenSpaceGuid.PcdPcieResetGpioBank|2
   gRk356xTokenSpaceGuid.PcdPcieResetGpioPin|30
   gRk356xTokenSpaceGuid.PcdPciePowerGpioBank|0
   gRk356xTokenSpaceGuid.PcdPciePowerGpioPin|28
+  gRk356xTokenSpaceGuid.PcdPcieLinkSpeed|0x3
+  gRk356xTokenSpaceGuid.PcdPcieNumLanes|0x2
+  gRk356xTokenSpaceGuid.PcdPcie30PhyLane0LinkNum|1
+  gRk356xTokenSpaceGuid.PcdPcie30PhyLane1LinkNum|1
 
   #
   # The ROC-RK3568-PC has a WiFi card on the third MSHC
@@ -477,12 +490,29 @@
   gRk356xTokenSpaceGuid.PcdMshc2NonRemovable|TRUE
 
   #
+  # Limit eMMC to 52 MHz
+  #
+  gRk356xTokenSpaceGuid.PcdEmmcForceHighSpeed|TRUE
+
+  #
   # RTC support (hym8563 at 0x51 on I2C5)
   #
   gRk356xTokenSpaceGuid.PcdRtcI2cBusBase|0xFE5E0000
   gRk356xTokenSpaceGuid.PcdRtcI2cAddr|0x51
 
 [PcdsDynamicHii.common.DEFAULT]
+
+  #
+  # Reset-related.
+  #
+  gRk356xTokenSpaceGuid.PcdPlatformResetDelay|L"ResetDelay"|gRk356xTokenSpaceGuid|0x0|0
+
+  #
+  # ConfigDxe
+  #
+  gRk356xTokenSpaceGuid.PcdSystemTableMode|L"SystemTableMode"|gConfigDxeFormSetGuid|0x0|0
+  gRk356xTokenSpaceGuid.PcdCpuClock|L"CpuClock"|gConfigDxeFormSetGuid|0x0|2
+  gRk356xTokenSpaceGuid.PcdCustomCpuClock|L"CustomCpuClock"|gConfigDxeFormSetGuid|0x0|816
 
   #
   # Common UEFI ones.
@@ -531,6 +561,11 @@
   #
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
+  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf {
+    <LibraryClasses>
+      VariableFlashInfoLib|MdeModulePkg/Library/BaseVariableFlashInfoLib/BaseVariableFlashInfoLib.inf
+  }
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
@@ -577,6 +612,11 @@
   Platform/Firefly/ROC-RK3568-PC/Drivers/BoardInitDxe/BoardInitDxe.inf
 
   #
+  # Config
+  #
+  Platform/Rockchip/Rk356x/Drivers/ConfigDxe/ConfigDxe.inf
+
+  #
   # FAT filesystem + GPT/MBR partitioning
   #
   MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
@@ -613,7 +653,7 @@
   #
   # Devicetree support
   #
-  # Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
+  Platform/Rockchip/Rk356x/Drivers/FdtDxe/FdtDxe.inf
 
   #
   # ACPI Support
@@ -645,6 +685,7 @@
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+  Silicon/Rockchip/Rk356x/Drivers/SataDxe/SataDxe.inf
 
   #
   # TRNG Support

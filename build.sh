@@ -6,6 +6,8 @@ cd "$(dirname $0)"
 
 RKUEFIBUILDTYPE=${1}
 shift
+RKUEFIBOARDS=${1}
+shift
 
 export WORKSPACE="$PWD"
 export PACKAGES_PATH=$PWD/edk2:$PWD/edk2-platforms:$PWD/edk2-non-osi:$PWD/edk2-rockchip
@@ -15,6 +17,7 @@ TRUST_INI=RK3568TRUST.ini
 MINIALL_INI=RK3568MINIALL.ini
 
 RKBIN=edk2-rockchip-non-osi/rkbin
+FIRMWARE_VER="$(git describe --tags --dirty)"
 
 fetch_deps() {
 	git submodule update --init --recursive
@@ -31,6 +34,7 @@ build_uefi() {
 	board=$2
 	echo " => Building UEFI"
 	build -n $(getconf _NPROCESSORS_ONLN) -b ${RKUEFIBUILDTYPE} -a AARCH64 -t GCC5 \
+	    -D FIRMWARE_VER="${FIRMWARE_VER}" \
 	    -p Platform/${vendor}/${board}/${board}.dsc
 }
 
@@ -64,10 +68,10 @@ build_fit() {
 	board_upper=`echo $board | tr '[:lower:]' '[:upper:]'`
 	echo " => Building FIT"
 	./scripts/extractbl31.py ${RKBIN}/${BL31}
-	cp -f Build/${board}/${RKUEFIBUILDTYPE}_GCC5/FV/RK356X_EFI.fd Build/RK356X_EFI.fd
 	cat uefi.its | sed "s,@BOARDTYPE@,${type},g" > ${board_upper}_EFI.its
 	./${RKBIN}/tools/mkimage -f ${board_upper}_EFI.its -E ${board_upper}_EFI.itb
-	rm -f bl31_0x*.bin Build/RK356X_EFI.fd ${board_upper}_EFI.its
+	dd if=Build/${board}/${RKUEFIBUILDTYPE}_GCC5/FV/RK356X_EFI.fd of=${board_upper}_EFI.itb bs=512 seek=$((1024 * 1024 / 512))
+	rm -f bl31_0x*.bin ${board_upper}_EFI.its
 }
 
 fetch_deps
@@ -80,17 +84,30 @@ test -r ${RKBIN}/${BL31} || (echo "${RKBIN}/${BL31} not found"; false)
 
 build_uefitools
 
-# Quartz64 boards
-build_uefi Pine64 Quartz64
-build_fit Quartz64 rk3566-quartz64-a
-# SOQuartz modules
-build_uefi Pine64 SOQuartz
-build_fit SOQuartz rk3566-soquartz-cm4
-# ROC-RK356x-PC boards
-build_uefi Firefly ROC-RK3566-PC
-build_fit ROC-RK3566-PC rk3566-roc-pc
-build_uefi Firefly ROC-RK3568-PC
-build_fit ROC-RK3568-PC rk3568-firefly-roc-pc
+for board in ${RKUEFIBOARDS}; do
+	case ${board} in
+	QUARTZ64)
+		build_uefi Pine64 Quartz64
+		build_fit Quartz64 rk3566-quartz64-a
+		;;
+	SOQUARTZ)
+		build_uefi Pine64 SOQuartz
+		build_fit SOQuartz rk3566-soquartz-cm4
+		;;
+	ROC-RK3566-PC)
+		build_uefi Firefly ROC-RK3566-PC
+		build_fit ROC-RK3566-PC rk3566-roc-pc
+		;;
+	ROC-RK3568-PC)
+		build_uefi Firefly ROC-RK3568-PC
+		build_fit ROC-RK3568-PC rk3568-firefly-roc-pc
+		;;
+	*)
+		echo "Unknown board ${board}"
+		exit 1
+		;;
+	esac
+done
 
 build_idblock
 

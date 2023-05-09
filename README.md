@@ -14,7 +14,15 @@ If you want to build the image, checkout the repository and run:
 
 Prebuild images are also provided for stable ports and are available in the [release section](https://github.com/jaredmcneill/quartz64_uefi/releases).
 
-**Note:** ROC-RK3568-PC, Station P2, and ROCK3 Compute Module ports are still work in progress: as such no prebuild images are released for those boards.
+**Note:** The ROCK3 Compute Module port is still work in progress: as such no prebuild images are released for those boards.
+
+## Installing
+
+In order to have the board booting in UEFI, the firmware has to be located in one of the supported boot devices. If the device (SD card, eMMC) are removable, the easiest way is to use `dd`, [Etcher](https://www.balena.io/etcher), etc. to write the appropriate .img file to the device.
+
+### Board specific installation guides
+
+* [Firefly ROC-RK3566-PC and ROC-RK3568-PC, StationPC Station M2 and P2](docs/firefly-ROC-RK356x-PC.md)
 
 ## Running
 
@@ -24,10 +32,10 @@ Connect a serial console to UART2 using settings `115200 8n1`.
 
 | OS | Version | Supported hardware | Notes |
 | --- | --- | --- | --- |
-| ESXi-Arm | 1.10 | HDMI, USB2, USB3, serial, PCIe, ethernet | |
-| Fedora | 36 | HDMI, USB2, USB3, serial, PCIe, thermal sensors | Needs `irqchip.gicv3_nolpi=1` for MSI support |
+| ESXi-Arm | 1.12 | HDMI, USB2, USB3, serial, PCIe, ethernet | |
+| Fedora | 38 | HDMI, USB2, USB3, serial, PCIe, thermal sensors | Needs `irqchip.gicv3_nolpi=1` for MSI support |
 | FreeBSD | 14.0-CURRENT | ? | Mangled serial output, boot stuck waiting for random seed |
-| NetBSD | 9.99.x | HDMI, USB2, USB3, serial, SD card, PCIe, eMMC, ethernet, thermal sensors | |
+| NetBSD | 9.99.x | HDMI, USB2, USB3, serial, SD card, PCIe, eMMC, SATA, ethernet, thermal sensors, watchdog | |
 | OpenBSD | 7.0-current | HDMI, USB2, USB3, serial | To use HDMI console, enter `set tty fb0` at the bootloader prompt. |
 | Ubuntu | 21.04 | HDMI, USB2, USB3, serial, PCIe, thermal sensors | Needs `irqchip.gicv3_nolpi=1` for MSI support |
 | Windows PE | ? | HDMI, USB3, PCIe | BSOD when plugging device in to USB2 port (#2) |
