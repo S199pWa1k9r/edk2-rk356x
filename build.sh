@@ -94,6 +94,10 @@ for board in ${RKUEFIBOARDS}; do
 		build_uefi Pine64 SOQuartz
 		build_fit SOQuartz rk3566-soquartz-cm4
 		;;
+	E25)
+                build_uefi Radxa E25
+                build_fit E25 rk3568-radxa-e25
+		;;
 	ROC-RK3566-PC)
 		build_uefi Firefly ROC-RK3566-PC
 		build_fit ROC-RK3566-PC rk3566-roc-pc
