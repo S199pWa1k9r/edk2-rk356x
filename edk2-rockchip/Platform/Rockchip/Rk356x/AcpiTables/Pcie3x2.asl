@@ -9,25 +9,13 @@
 #include <IndustryStandard/Acpi60.h>
 
 // PCIe
-Device (PCI0) {
+Device (PCI2) {
     Name (_HID, "PNP0A08")
     Name (_CID, "PNP0A03")
     Name (_CCA, Zero)
     Name (_UID, 2)
     Name (_SEG, 2)
     Name (_BBN, One)
-
-    OperationRegion (PGRF, SystemMemory, 0xFDCB8000, 0x100)
-    Field (PGRF, DWordAcc, NoLock, Preserve) {
-        Offset  (0x80),
-        PSTA,   32
-    }
-    Method (_STA, 0, Serialized) {
-        If (PSTA & 0x4000) {
-            Return (0xF)
-        }
-        Return (0x0)
-    }
 
     Name (_PRT, Package() {
         Package (4) { 0x0FFFF, 0, Zero, 194 },
@@ -70,7 +58,7 @@ Device (PCI0) {
         return (RBUF)
     }
 
-    Device (RES0) {
+    Device (RES2) {
         Name (_HID, "PNP0C02")
         Name (_CRS, ResourceTemplate () {
         QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
@@ -128,4 +116,4 @@ Device (PCI0) {
         Return(Arg3)
         }
     } // End _OSC
-} // PCI0
+} // PCI2
