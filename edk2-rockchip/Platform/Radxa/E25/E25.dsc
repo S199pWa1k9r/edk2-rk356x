@@ -30,7 +30,7 @@
   PCIE2x1_ENABLE                 = FALSE
   PCIE3x1_ENABLE                 = FALSE
   PCIE3x2_ENABLE                 = TRUE
-  SATA1_ENABLE                   = TRUE
+  SATA1_ENABLE                   = FALSE
   RTL_ENABLE                     = FALSE
 
   #
@@ -779,8 +779,8 @@
   #
   # Realtek Network support
   # serg
-!include NetworkPkg/Network.dsc.inc
 !if $(RTL_ENABLE) == TRUE
+!include NetworkPkg/Network.dsc.inc
   #
   # Realtek PCIe UNDI Driver
   #
